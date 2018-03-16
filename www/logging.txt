@@ -1,0 +1,28 @@
+INFO:root:found model: User (table: users)
+INFO:root:	  found mapping: id ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: email ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: passwd ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: admin ==> <BooleanField, boolean:None>
+INFO:root:	  found mapping: name ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: image ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: created_at ==> <FloatField, real:None>
+INFO:root:found model: Blog (table: blog)
+INFO:root:	  found mapping: id ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: user_id ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: user_name ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: user_image ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: name ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: summary ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: content ==> <TextField, text:None>
+INFO:root:	  found mapping: created_at ==> <FloatField, real:None>
+INFO:root:found model: Comment (table: comments)
+INFO:root:	  found mapping: id ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: blog_id ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: user_id ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: user_name ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: user_image ==> <StringField, varchar(50):None>
+INFO:root:	  found mapping: content ==> <TextField, text:None>
+INFO:root:	  found mapping: created_at ==> <FloatField, real:None>
+INFO:root:create database connection pool...
+INFO:root:SQL: insert into `users` ( email , passwd , admin , name , image , created_at , `id`) values (?,?,?,?,?,?,?)
+INFO:root:close database connection pool...
