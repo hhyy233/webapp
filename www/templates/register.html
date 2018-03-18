@@ -1,0 +1,98 @@
+{% extends '__base__.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block beforehead %}
+
+<script>
+
+function validateEmail(email) {
+	var re = /^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$/;
+	return re.test(email.toLowerCase());
+}
+
+$(function () {
+	var vm = new Vue({
+		el: '#vm',
+		data: {
+			name: '',
+			email: '',
+			password1: '',
+			password2: ''
+		},
+		methods: {
+			submit: function (event){
+				event.preventDefault();
+				var $form = $('#vm');
+				if(! this.name.trim()){
+					return $form.showFormError('Please enter username');
+				}
+				if(! validateEmail(this.email.trim().toLowerCase())) {
+					return $form.showFormError('Please enter the correct Email address');
+				}
+				if(this.password1.length < 6){
+					return $form.showFormError('Password should be at less 6 charaters long')
+				}
+				if (this.password1 !== this.password2){
+					return $form.showFormError('These passwords are not the same')
+				}
+				var email = this.email.trim().toLowerCase();
+				$form.postJSON('/api/users',{
+					name: this.name.trim(),
+					email: email,
+					passwd: CryptoJS.SHA1(email+':'+this.password1).toString()
+				}, function(err, r){
+					if(err){
+						return $form.showFormError(err);
+					}
+					return location.assign('/');
+				});
+			}
+		}
+	});
+	$('#vm').show();
+});
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+	<div class="uk-width-2-3">
+		<h1> Welcome!! </h1>
+		<form id="vm" v-on="submit: submit" class="uk-form uk-form-stacked">
+			<div class="uk-alert uk-alert-danger uk-hidden"></div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">Username: </label>
+				<div class="uk-form-controls">
+					<input v-model="name" type="text" maslength="50" placeholder="Username" class="uk-width-1-1">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">Email: </label>
+				<div class="uk-form-controls">
+					<input v-model="email" type="text" maslength="50" placeholder="Email" class="uk-width-1-1">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">Password: </label>
+				<div class="uk-form-controls">
+					<input v-model="password1" type="password" maslength="50" placeholder="Password" class="uk-width-1-1">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">Enter password again: </label>
+				<div class="uk-form-controls">
+					<input v-model="password2" type="password" maslength="50" placeholder="Enter password again" class="uk-width-1-1">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-user"></i> Submit</button>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}
+
+

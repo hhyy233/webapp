@@ -3,10 +3,12 @@
 
 import asyncio, logging
 import aiomysql
-logging.basicConfig(filename='logging_orm.txt', level=logging.INFO)
+# logging.basicConfig(filename='logging_orm.txt', level=logging.INFO)
 
 def log(sql, args=()):
 	logging.info('SQL: %s' % sql)
+	# logging.info(args)
+	# print(sql, args)
 	
 async def create_pool(loop, **kw):
 	logging.info('create database connection pool...')
@@ -44,7 +46,7 @@ async def select(sql, args, size=None):
 		return rs
 		
 async def execute(sql, args, autocommit=True):
-	log(sql)
+	log(sql, args)
 	async with __pool.get() as conn:
 		if not autocommit:
 			await conn.begin()
@@ -177,7 +179,7 @@ class Model(dict, metaclass=ModelMetaclass):
 			if isinstance(limit, int):
 				sql.append('?')
 				args.append(limit)
-			elif isinstance(limit, tupple) and len(limit) == 2:
+			elif isinstance(limit, tuple) and len(limit) == 2:
 				sql.append('?, ?')
 				args.extend(limit)
 			else:
@@ -207,6 +209,7 @@ class Model(dict, metaclass=ModelMetaclass):
 		# print('Start saving.')
 		args = list(map(self.getValueOrDefault, self.__fields__))
 		args.append(self.getValueOrDefault(self.__primary_key__))
+		# print(self.__insert__)
 		# print(args)
 		rows = await execute(self.__insert__, args)
 		if rows != 1:

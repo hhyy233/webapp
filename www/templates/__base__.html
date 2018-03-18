@@ -1,0 +1,90 @@
+<!DOVTYPE html>
+<!--
+{% macro pagination(url, page) %}
+    <ul class="uk-pagination">
+        {% if page.has_previous %}
+            <li><a href="{{ url }}{{ page.page_index - 1 }}"><i class="uk-icon-angle-double-left"></i></a></li>
+        {% else %}
+            <li class="uk-disabled"><span><i class="uk-icon-angle-double-left"></i></span></li>
+        {% endif %}
+            <li class="uk-active"><span>{{ page.page_index }}</span></li>
+        {% if page.has_next %}
+            <li><a href="{{ url }}{{ page.page_index + 1 }}"><i class="uk-icon-angle-double-right"></i></a></li>
+        {% else %}
+            <li class="uk-disabled"><span><i class="uk-icon-angle-double-right"></i></span></li>
+        {% endif %}
+    </ul>
+{% endmacro %}
+-->
+
+<html>
+<head>
+	<meta charset="utf-8" />
+    {% block meta %}<!-- block meta  -->{% endblock %}
+    <title>{% block title %} ? {% endblock %} - Poe</title>
+    <link rel="stylesheet" href="/static/css/uikit.min.css">
+    <link rel="stylesheet" href="/static/css/uikit.gradient.min.css">
+    <link rel="stylesheet" href="/static/css/awesome.css" />
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/sha1.min.js"></script>
+    <script src="/static/js/uikit.min.js"></script>
+    <script src="/static/js/sticky.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/awesome.js"></script>
+	{% block beforehead %}<!--beforehead block-->{% endblock %}
+</head>
+<body>
+	<nav class="uk-navbar uk-navbar-attached uk-margin-bottom">
+		<div class="uk-navbar-left">
+			<a href="/" class="uk-navbar-brand"> Poetry </a>
+			<ul class="uk-navbar-nav">
+				<li data-url="blogs"><a href="/"><i class="uk-icon-home"></i> Home</a></li>
+				<li><a href="/pickone"><i class="uk-icon-refresh"></i> Pick One</a></li>
+				<!-- <li><a target="_blank" href="#"><i class="uk-icon-book"></i>test2</a></li> -->
+				<!-- <li><a href="/api/users/test" uk-icon="code">API</a></li> -->
+			</ul>
+		</div>
+		<div class="uk-navbar-right">
+			<ul class="uk-navbar-nav">
+			{% if __user__ %}
+				<button class="uk-button uk-button-default" type="button"><i class="uk-icon-user"></i> {{__user__.name}} </button>
+				<div uk-dropdown>
+					<ul class="uk-nav uk-nav-navbar">
+						{% if __user__.admin %}
+							<li><a href="/manage/blogs"><i class="uk-icon-list"></i> Manage blogs</a></li>
+							<li><a href="/manage/blogs/create"><i class="uk-icon-plus"></i> Create blogs</a></li>
+						{% endif %}
+						<li><a href="/signout"><i class="uk-icon-sign-out"></i> Sign out</a></li>
+					</ul>
+				</div>
+			{% else %}
+				<li><a href="/signin"><i class="uk-icon-sign-in"></i> Sign in</a></li>
+				<li><a href="/register"><i class="uk-icon-edit"></i> Register</a></li>
+			{% endif %}
+			</ul>
+		</div>
+	</nav>
+	
+	<div class="uk-container uk-container-center">
+		<div class="uk-grid">
+			{% block content %}
+			{% endblock %}
+		</div>
+	</div>
+	
+	<div class="uk-margin-large-top" style="backgroud-color:#eee; border-top:1px solid #ccc">
+		<div class="uk-container uk-container-center uk-text-center">
+			<div class="uk-panel uk-margin-top uk-margin-bottom">
+				<p>
+					<a target="_blank" href="https://github.com/hhyy233/webapp" class="uk-icon-button uk-icon-github"></a>
+					<a target="_blank" href="#" class="uk-icon-button uk-icon-linkedin-square"></a>
+				</p>
+				<p>Power by <a href="#">Awesome Python Webapp</a>. Copyright &copy; 2018. [<a href="/manage/" target="_self">Manage</a>]</p>
+				<a target="_blank" href="#"><i class="uk-icon-html5" style="font-size:64px; color: #444;"></i></a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+

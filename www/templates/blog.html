@@ -1,0 +1,101 @@
+{% extends '__base__.html' %}
+
+{% block title %}{{ blog.name }}{% endblock %}
+
+{% block beforehead %}
+
+<script>
+
+var comment_url = '/api/blogs/{{ blog.id }}/comments';
+
+$(function () {
+	var $form = $('#form-comment');
+	$form.submit(function (e) {
+		e.preventDefault();
+		$form.showFormError('');
+		var content = $form.find('textarea').val().trim();
+		if (content===''){
+			return $form.showFormError('Please enter comment.')
+		}
+		$form.postJSON(comment_url, {content: content}, function (err, results){
+			if (err) {
+				return $form.showFormError(err);
+			}
+			refresh();
+		});
+	});
+});
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+	<div class="uk-width-medium-3-4">
+		<article class="uk-article">
+			<h2>{{ blog.name }}</h2>
+			<p class="uk-article-meta">{{ blog.created_at|datetime }}</p>
+			<p><span style="color:grey">{{ blog.summary|safe }}<span></p>
+			<p>{{ blog.html_content|safe }}</p>
+		</article>
+		
+		<hr class="uk-article-divider">
+		
+		<h3>Comments</h3>
+		
+		<article class="uk-comment">
+			<!-- <h4 class="uk-comment-title">Post a comment:</h4> -->
+			
+			<div class="uk-comment-body">
+				<form id="form-comment" class="uk-form">
+					<div class="uk-alert uk-alert-danger uk-hidden"></div>
+					<div class="uk-form-row uk-form-controls">
+						<textarea row="6" placeholder="Enter your comment..." style="width:100%;resize:none;"></textarea>
+					</div>
+				{% if __user__ %}
+					<div class=="uk-form-row">
+						<button type="submit" class="uk-button uk-button-default"><i class="uk-icone-comment"></i>PUBLISH</button>
+					</div>
+				{% endif %}
+				</form>
+			</div>
+		</article>
+		<hr class="uk-article-divider">
+		
+		<h3>Newest comments</h3>
+		
+		<ul class="uk-comment-list">
+			{% for comment in comments %}
+			<li>
+				<article class="uk-comment uk-comment-primary">
+					<header class="uk-comment-header uk-flex-middle">
+						<img class="uk-comment-avatar uk-border-circle" width="50" height="50" src="{{ comment.user_image}}">
+						<h4 class="uk-comment-title">{{ comment.user_name }}{% if comment.user_id==blog.user_id %}(Author){% endif %}</h4>
+						<p class="uk-comment-meta">{{ comment.created_at|datetime }}</p>
+					</header>
+					<div class="uk-comment-body">
+						{{ comment.html_content|safe }}
+					</div>
+				</article>
+			</li>
+			{% else %}
+			<p>No comment so far...</p>
+			{% endfor %}
+		</ul>
+		
+	</div>
+	
+	<div class="uk-width-medium-1-4">
+		<div class="uk-panel uk-panel-header">
+			<h3 class="uk-panel-title"> Link: </h3>
+			<ul class="uk-list uk-list-line">
+				<li><i class="uk-icon-link"></i><a target="_blank" href="https://www.poets.org/"> Poets</a></li>
+				<li><i class="uk-icon-link"></i><a target="_blank" href="https://www.poetryfoundation.org/"> Poetry Foundation</a></li>
+			</ul>
+		</div>
+	</div>
+
+{% endblock %}
+
+
